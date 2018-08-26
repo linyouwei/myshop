@@ -67,7 +67,11 @@
                 params.areaCode = '86'
                 var url = '/api/user/login'
                 this.$api.post(url,params,r=>{
-                    this.$router.push({name: 'center',params:{ id:'1'}});
+                    this.$router.push({name: 'center'})
+                    //存储localStorage
+                    console.log( r.data)
+                    localStorage.setItem('id', r.data.id)
+                    localStorage.setItem('token',r.data.token)
             },r=>{
                 var data = r.message
                  this.$toast(data); 

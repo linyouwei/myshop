@@ -25,6 +25,9 @@ import $ from 'jquery'
 import './assets/ulite/ulite.css'
 import './assets/ulite/ulite.js'
 
+import './assets/common/common.css'
+
+
 
 
 
