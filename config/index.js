@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
       proxyTable: {
           '/**': {
-              target: 'http://localhost:1200', // 你接口的域名
+              target: 'http://booking.uclbrt.com/', // 你接口的域名
               secure: false,
           }
       },
