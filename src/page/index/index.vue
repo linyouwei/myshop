@@ -69,8 +69,11 @@
                             <div class="content-panel-body shop-panel-content clearfix" >
                                 <div id="shopContent" >
                                     <!--获取推荐的数据-->
-                                        <div class="col-xs-6 shopItem"  v-for="(item,index) of shopGoods.recommend" :class="{hidden:item.hidden,borderNone:item.borderNone}">
-                                            <div class="shop-img-content">
+                                        <div class="col-xs-6 shopItem"  v-for="(item,index) of shopGoods.recommend"
+                                             :class="{hidden:item.hidden,borderNone:item.borderNone}"
+                                    @click="showDetail(item,index)"
+                                                >
+                                            <div class="shop-img-content"   >
                                                 <div class="panel-shop-img">
                                                     <div class="shop-cover" :style='{backgroundImage:"url("+item.cover+")"}'>
                                                     </div>
@@ -354,10 +357,6 @@
                             })
                         }
                         console.log(that.shopClassify)
-
-
-
-
                 },
                 r=>{})
 
@@ -398,6 +397,12 @@
                     }
                     this.shopClassify[index].isClassifyShow = !this.shopClassify[index].isClassifyShow
                     console.log(shopItem,index)
+                },
+                showDetail:function(item,index){
+                    console.log(1)
+                    console.log(item,index)
+                    console.log(2)
+                    this.$router.push({name: 'details',params:{'shopId':this.shop.id,'goodsId':item.id,'index':'1'}})
                 }
              }
 

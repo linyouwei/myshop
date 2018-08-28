@@ -28,6 +28,10 @@ import './assets/ulite/ulite.js'
 import './assets/common/common.css'
 
 
+//轮播图
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+import './assets/swiper/swiper.min.css';
+Vue.use(VueAwesomeSwiper)
 
 
 

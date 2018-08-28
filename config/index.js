@@ -3,7 +3,8 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-
+//http://booking.uclbrt.com/
+//http://localhost:1200/
 module.exports = {
   dev: {
     // Paths
@@ -11,7 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
       proxyTable: {
           '/**': {
-              target: 'http://booking.uclbrt.com/', // 你接口的域名
+			  
+              target: 'http://localhost:1200/', // 你接口的域名
               secure: false,
           }
       },
