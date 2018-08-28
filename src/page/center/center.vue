@@ -1,6 +1,11 @@
 <template>
     <el-container>
         <el-header>
+            <div style="float: left;width: 50px">
+                <router-link to='/index' tag='a' >
+                    返回首页
+                </router-link>
+            </div>
             <div>订单中心</div>
         </el-header>
         <el-main>

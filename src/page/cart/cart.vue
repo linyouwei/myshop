@@ -3,7 +3,11 @@
 
         <div id="doc" class="container">
             <div id="doc-header" class="navbar-cart">
-                <a href="/shop/index.html" class="back-home">首页</a>
+                <div style="float: left;width: 50px;height:50px;line-height: 50px">
+                    <router-link to='/index' tag='a' >
+                        返回首页
+                    </router-link>
+                </div>
                 <div class="navbar-title">购物车</div>
                 <div class="compile" editor='1' ></div>
             </div>
@@ -13,7 +17,7 @@
                         <div class="store-head">
                             <div class="select"
                                  :class="{'isChecked':shopItem.isSelect,'unChecked':!shopItem.isSelect}"
-                                @click="shopItem.isSelect=!shopItem.isSelect"
+                                @click="changeSingleShopStatus(shopItem,shopIndex)"
                                     ></div>
                             <div class="store-name">{{shopItem.shopName}}</div>
                             <div class="lose-efficacy"></div>
@@ -21,7 +25,7 @@
                         <div class="store-goods">
                             <div class="store-goods-list" v-for="(goodItem,goodIndex) in shopItem.goods">
                                 <div class="select" :class="{'isChecked':goodItem.isSelect,'unChecked':!goodItem.isSelect}"
-                                     @click="goodItem.isSelect=!goodItem.isSelect"></div>
+                                     @click="changeGoodsSelectStatus(shopIndex,goodIndex)"></div>
 
                                 <div class="goods-img-content">
                                     <div class="goods-picture">
@@ -43,21 +47,19 @@
                                             <span>￥</span><span class="price">{{goodItem.price}}</span>
                                         </div>
                                         <div class="sum">
-                                            <div class="reduceSum" @click="goodItem.pro_num--">-</div>
+                                            <div class="reduceSum" @click="reduceSum(shopIndex,goodIndex)">-</div>
                                             <input type="" v-model="goodItem.pro_num" />
-                                            <div class="addSum" @click="goodItem.pro_num++">+</div>
+                                            <div class="addSum" @click="addSum(shopIndex,goodIndex)">+</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-        {{shopIndex}}
-
-        <div class="store-foot">
+                        <div class="store-foot">
                             <div class="store-pay "
-                                 :class="{'hidden':getShopTotal.totalPrice>0?false:true}"
+                                 :class="{'hidden':shopItem.singleTotalPrice>0?false:true}"
                                     >
-                                <span>应付：</span><span class="pay" :shopIndex=shopIndex">{{getShopTotal.totalPrice}}</span>
+                                <span>应付：</span><span class="pay">{{shopItem.singleTotalPrice>0?shopItem.singleTotalPrice:"￥0"}}</span>
                             </div>
                             <div class="store-check">
                                 <span>已选</span><span class="choice">{{shopItem.singleSelectNum>0?shopItem.singleSelectNum:0}}</span>件商品
@@ -130,30 +132,14 @@
         },
         mounted:function(){
             this.getCartShow()
-            this.addAttribute()
 
         },
         computed:{
-            getShopTotal:function(index){
-                let shopIndex = 0
-                let _this = this
-                let singleSelectNum = 0 //单个店铺的选择的商品总数
-                let singleTotalPrice = 0//单个店铺总价
-                _this.cartList[shopIndex].goods.forEach(function(goodsItem,goodsIndex){
-                    if(goodsItem.isSelect){
-                        //当前商品选择的个数
-                        singleSelectNum =singleSelectNum+parseInt(goodsItem.pro_num)
-                        singleTotalPrice = singleTotalPrice +parseInt(goodsItem.pro_num)*goodsItem.price
-                    }
-                })
-                return {'totalPrice':singleTotalPrice}
-            },
 
         },
 
 
         methods:{
-
             getCartShow:function(){
                 //获取id和token
                 //请求接口
@@ -172,21 +158,19 @@
                         cartList.forEach(function(item){
                                 _this.cartList.push(item)
                             })
-                    _this.cartList.forEach(function(shopItem,shopIndex){
-                        _this.$set(_this.cartList[shopIndex],'singleTotalPrice',0)
-                        _this.$set(_this.cartList[shopIndex],'singleSelectNum',0)
+                    //cartList添加pro_num 商品数的属性
+                    cartList.forEach(function(shopItem,shopIndex){
                         shopItem.goods.forEach(function(goodsItem,goodsIndex){
                             _this.$set(_this.cartList[shopIndex].goods[goodsIndex],'pro_num',1)
                         })
                     })
                     //cartList的商店和商品添加isSelect属性
-                    _this.cartList.forEach(function(shopItem,shopIndex){
+                    cartList.forEach(function(shopItem,shopIndex){
                         _this.$set(_this.cartList[shopIndex],'isSelect',false)
                         shopItem.goods.forEach(function(goodsItem,goodsIndex){
                             _this.$set(_this.cartList[shopIndex].goods[goodsIndex],'isSelect',false)
                         })
                     })
-                    console.log(cartList)
                 },r=>{
                     var data = r.message
                     _this.$toast(data);
@@ -194,26 +178,6 @@
             }else{
                 _this.$router.push({name: 'login'})
             }
-            },
-            addAttribute:function(){
-                let _this = this
-                //cartList添加pro_num 商品数的属性
-                /*_this.cartList.forEach(function(shopItem,shopIndex){
-                    _this.$set(_this.cartList[shopIndex],'singleTotalPrice',0)
-                    _this.$set(_this.cartList[shopIndex],'singleSelectNum',0)
-                    shopItem.goods.forEach(function(goodsItem,goodsIndex){
-                        _this.$set(_this.cartList[shopIndex].goods[goodsIndex],'pro_num',1)
-                    })
-                })
-                //cartList的商店和商品添加isSelect属性
-                _this.cartList.forEach(function(shopItem,shopIndex){
-                    _this.$set(_this.cartList[shopIndex],'isSelect',false)
-                    shopItem.goods.forEach(function(goodsItem,goodsIndex){
-                        _this.$set(_this.cartList[shopIndex].goods[goodsIndex],'isSelect',false)
-                    })
-                })*/
-
-
             },
             changeGoodsSelectStatus:function(shopIndex,goodsIndex){//改变商品的选择状态
                 let _this = this
@@ -245,8 +209,7 @@
                 //检查是否需要改变购物车全选按钮
                 _this.checkCartState()
             },
-            changeCartSelect:function () { //勾
-            // 选全选
+            changeCartSelect:function () { //勾选全选
                 let _this = this
                 _this.cartList.forEach(function(shopItem,shopIndex){
                     _this.cartList[shopIndex].isSelect = !_this.isSelectAll
