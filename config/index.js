@@ -13,7 +13,7 @@ module.exports = {
       proxyTable: {
           '/**': {
 			  
-              target: 'http://localhost:1200/', // 你接口的域名
+              target: 'http://booking.uclbrt.com/', // 你接口的域名
               secure: false,
           }
       },
@@ -49,7 +49,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
 
     /**
      * Source Maps

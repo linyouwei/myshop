@@ -9,6 +9,7 @@ import confirm from '@/page/cart/confirm'
 import cart from '@/page/cart/cart'
 
 
+
 Vue.use(Router)
 
 export default new Router({
@@ -49,7 +50,7 @@ export default new Router({
           path: '/cart/shopId=:shopId',
           component: cart,
           name:'cart'
-
       }
+
   ]
 })
